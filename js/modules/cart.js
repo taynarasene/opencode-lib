@@ -78,10 +78,14 @@ var cart = {
         });
     },
     // Busca Sessão
-    getSession: async function (){
+    getSession: async function (callback){
         hash = await fetch(`/nocache/app.php?loja=${store.id}`);
         dataSession = await hash.json();
         dataSession = (dataSession.hash === undefined || dataSession.hash === null || dataSession.hash === '')? dataLayer[0].visitorId : dataSession.hash;
+
+        if(typeof callback == "function")
+            callback(dataSession);
+
         return dataSession;
     }
 };
