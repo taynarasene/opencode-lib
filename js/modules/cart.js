@@ -1,5 +1,37 @@
-var cart = {
+/**
+  * author: Taynara Sene
+  * github: taahsene
+  *
+  * Biblioteca em Javascript da api publica de carrinho
+  *
+  * **Utilização**
+  *
+  * Utilize a função abaixo passando os parametros que deseja.
+  *
+  * **get DataSession**
+  * cart.getSession(function (response) {
+  *  console.log(response);
+  * })
+  *  **get Products**
+  * cart.getProducts( function(response) {
+  *     console.log(response);
+  * });
+  *
+  * ** add Product **
+  * var Products ={'product_id' : 25, 'quantity' : 1 };
+  * cart.addProduct(Products, function(response){
+  *     console.log(response);
+  * })
+  *
+  * **Delete Product**
+  * var Delete = {'product_id' : 25 };
+  * cart.deleteProduct(Delete, function(response){
+  *   console.log(response);
+  * })
+  */
 
+var cart = {
+    // Adiciona produto
     addProduct: async function (product, callback) {
         dataSession = cart.getSession();
         product_id = product.product_id;
@@ -17,9 +49,9 @@ var cart = {
                         callback(resp);
                 }
             )}
-
-        )},
-
+        )
+    },
+    // Busca produto
     getProducts: async function (callback) {
         dataSession = await cart.getSession();
         getProducts = await fetch(`/web_api/cart/${dataSession}`);
@@ -28,7 +60,7 @@ var cart = {
         if(typeof callback == "function")
             callback(response);
     },
-
+    // Deleta produto
     deleteProduct: async function (product, callback) {
         product_id = product.product_id;
         variantId = (product.variant_id == undefined||product.variant_id == null)? 0 : product.variant_id;
@@ -45,10 +77,11 @@ var cart = {
                 })
         });
     },
-
-    getSession: function (){
-        dataSession =  $("html").attr("data-session");
-        dataSession = (dataSession === undefined || dataSession === null || dataSession === '')? dataLayer[0].visitorId : dataSession;
+    // Busca Sessão
+    getSession: async function (){
+        hash = await fetch(`/nocache/app.php?loja=${store.id}`);
+        dataSession = await hash.json();
+        dataSession = (dataSession.hash === undefined || dataSession.hash === null || dataSession.hash === '')? dataLayer[0].visitorId : dataSession.hash;
         return dataSession;
     }
 };
