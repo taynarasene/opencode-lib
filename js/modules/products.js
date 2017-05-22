@@ -15,7 +15,7 @@
   *  console.log(response);
   * })
   *  **get Product ID**
-  * cart.getProducts(product_id, attrs, function(response) {
+  * products.getProducts(product_id, attrs, function(response) {
   *     console.log(response);
   * });
   *
